@@ -33,7 +33,7 @@ for gpu in gpus:
 
 # path to JAAD dataset, please change to your local path
 path_jaad = "./JAAD"
-path_pie = "/media/steven/MEDIA/PIE"
+path_pie = "./PIE"
 
 # config = tf.compat.v1.ConfigProto()
 # # config.gpu_options.per_process_gpu_memory_fraction=0.8
