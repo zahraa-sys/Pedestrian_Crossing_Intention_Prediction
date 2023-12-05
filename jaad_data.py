@@ -57,7 +57,7 @@ class JAAD(object):
         self._year = '2016'
         self._name = 'JAAD'
         self._regen_pkl = regen_pkl
-        self._image_ext = '.png'
+        self._image_ext = '.jpg'
 
         # Paths
         self._jaad_path = data_path if data_path else self._get_default_path()
@@ -121,7 +121,7 @@ class JAAD(object):
           :return: Return the path to the given image
           """
         return join(self._images_path, vid,
-                    '{:05d}.png'.format(fid))
+                    '{:05d}.jpg'.format(fid))
 
     # Visual helpers
     def update_progress(self, progress):
@@ -200,8 +200,8 @@ class JAAD(object):
             while success:
                 self.update_progress(img_count / num_frames)
                 img_count += 1
-                if not exists(join(save_images_path, "{:05d}.png").format(frame_num)):
-                    cv2.imwrite(join(save_images_path, "{:05d}.png").format(frame_num), image)
+                if not exists(join(save_images_path, "{:05d}.jpg").format(frame_num)):
+                    cv2.imwrite(join(save_images_path, "{:05d}.jpg").format(frame_num), image)
                 else:
                     print('path %s already exists')
                 success, image = vidcap.read()
@@ -789,7 +789,7 @@ class JAAD(object):
             img_height = annotations[vid]['height']
             num_frames = annotations[vid]['num_frames']
             for i in range(0,num_frames,frame_stride):
-                ped_samples[join(self._jaad_path, 'images', vid, '{:05d}.png'.format(i))] = []
+                ped_samples[join(self._jaad_path, 'images', vid, '{:05d}.jpg'.format(i))] = []
             for pid in annotations[vid]['ped_annotations']:
                 if params['data_split_type'] != 'default' and pid not in _pids:
                     continue
@@ -798,7 +798,7 @@ class JAAD(object):
                     difficult = -1
                     if image_set in ['train', 'val']:
                         continue
-                imgs = [join(self._jaad_path, 'images', vid, '{:05d}.png'.format(f)) for f in \
+                imgs = [join(self._jaad_path, 'images', vid, '{:05d}.jpg'.format(f)) for f in \
                         annotations[vid]['ped_annotations'][pid]['frames']]
                 boxes = annotations[vid]['ped_annotations'][pid]['bbox']
                 occlusion = annotations[vid]['ped_annotations'][pid]['occlusion']
@@ -1074,7 +1074,7 @@ class JAAD(object):
                     continue
                 num_pedestrians += 1
                 frame_ids = pid_annots[pid]['frames']
-                images = [join(self._jaad_path, 'images', vid, '{:05d}.png'.format(f)) for f in
+                images = [join(self._jaad_path, 'images', vid, '{:05d}.jpg'.format(f)) for f in
                           pid_annots[pid]['frames']]
                 boxes = pid_annots[pid]['bbox']
                 occlusions = pid_annots[pid]['occlusion']
