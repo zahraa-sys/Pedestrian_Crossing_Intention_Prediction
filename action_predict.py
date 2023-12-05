@@ -99,7 +99,7 @@ class DeepLabModel(object):
         width, height = image.size
         resize_ratio = 1.0 * self.INPUT_SIZE / max(width, height)
         target_size = (int(resize_ratio * width), int(resize_ratio * height))
-        resized_image = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
+        resized_image = image.convert('RGB').resize(target_size, Image.LANCZOS)
         batch_seg_map = self.sess.run(
             self.OUTPUT_TENSOR_NAME,
             feed_dict={self.INPUT_TENSOR_NAME: [np.asarray(resized_image)]})
@@ -535,7 +535,7 @@ class ActionPredict(object):
         bbox_seq = bbox_sequences.copy()
         i = -1
         # flow size (h,w)
-        flow_size = read_flow_file(img_sequences[0][0].replace('images', 'optical_flow').replace('png', 'flo')).shape
+        flow_size = read_flow_file(img_sequences[0][0].replace('images', 'optical_flow').replace('jpg', 'flo')).shape
         img_size = cv2.imread(img_sequences[0][0]).shape
         # A ratio to adjust the dimension of bounding boxes (w,h)
         box_resize_coef = (flow_size[1]/img_size[1], flow_size[0]/img_size[0])
@@ -550,7 +550,7 @@ class ActionPredict(object):
                 vid_id = imp.split('/')[-2]
                 img_name = imp.split('/')[-1].split('.')[0]
                 optflow_save_folder = os.path.join(save_path, set_id, vid_id)
-                ofp = imp.replace('images', 'optical_flow').replace('png', 'flo')
+                ofp = imp.replace('images', 'optical_flow').replace('jpg', 'flo')
                 # Modify the path depending on crop mode
                 if crop_type == 'none':
                     optflow_save_path = os.path.join(optflow_save_folder, img_name + '.flo')
@@ -739,7 +739,7 @@ class ActionPredict(object):
                             d[k].append(flipped)
                         if k == 'image':
                             flipped = d[k][i].copy()
-                            flipped = [im.replace('.png', '_flip.png') for im in flipped]
+                            flipped = [im.replace('.jpg', '_flip.jpg') for im in flipped]
                             d[k].append(flipped)
                         if k in ['speed', 'ped_id', 'crossing', 'walking', 'looking']:
                             d[k].append(d[k][i].copy())
@@ -3325,7 +3325,7 @@ class TwoStreamFusion(ActionPredict):
 
         net_model = Model(inputs=[rgb_model.input, temporal_model.input],
                           outputs=output)
-        plot_model(net_model, to_file='model_imgs/model.png',
+        plot_model(net_model, to_file='model_imgs/model.jpg',
                    show_shapes=False, show_layer_names=False,
                    rankdir='TB', expand_nested=False, dpi=96)
 
@@ -3583,7 +3583,7 @@ class MASK_PCPA(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA.jpg')
         return net_model
 
 
@@ -3780,7 +3780,7 @@ class MASK_PCPA_2(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2.jpg')
         return net_model
 
 
@@ -3988,7 +3988,7 @@ class MASK_PCPA_3(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_3.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_3.jpg')
         return net_model
 
 class  MASK_C3D(ActionPredict):
@@ -4176,7 +4176,7 @@ class  MASK_C3D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_C3D.png')
+        plot_model(net_model, to_file='model_imgs/MASK_C3D.jpg')
         return net_model
 
 class  ORI_C3D(ActionPredict):
@@ -4365,7 +4365,7 @@ class  ORI_C3D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/ORI_C3D.png')
+        plot_model(net_model, to_file='model_imgs/ORI_C3D.jpg')
         return net_model
 
 
@@ -4523,7 +4523,7 @@ class PCPA(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/PCPA.png')
+        plot_model(net_model, to_file='model_imgs/PCPA.jpg')
         return net_model
 
 class PCPA_2D(ActionPredict):
@@ -4718,7 +4718,7 @@ class PCPA_2D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/PCPA_2D.png')
+        plot_model(net_model, to_file='model_imgs/PCPA_2D.jpg')
         return net_model
 
 class MASK_PCPA_2D(ActionPredict):
@@ -4917,7 +4917,7 @@ class MASK_PCPA_2D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2D.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2D.jpg')
         return net_model
 
 class MASK_PCPA_2_2D(ActionPredict):
@@ -5151,7 +5151,7 @@ class MASK_PCPA_2_2D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2_2D.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_2_2D.jpg')
         return net_model
 
 
@@ -5376,7 +5376,7 @@ class MASK_PCPA_3_2D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_3_2D.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_3_2D.jpg')
         return net_model
 
 
@@ -5554,7 +5554,7 @@ class MASK_PCPA_4_2D(ActionPredict):
         net_model = Model(inputs=network_inputs,
                           outputs=model_output)
         net_model.summary()
-        plot_model(net_model, to_file='model_imgs/MASK_PCPA_4_2D.png')
+        plot_model(net_model, to_file='model_imgs/MASK_PCPA_4_2D.jpg')
         return net_model
 
 
@@ -5658,4 +5658,3 @@ class DataGenerator(Sequence):
 
     def _generate_y(self, indices):
         return np.array(self.labels[indices])
-
